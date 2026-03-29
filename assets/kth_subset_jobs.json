@@ -1,0 +1,558 @@
+{
+  "description": "KTH-SP2 subset converted to Batsim workload (50 jobs)",
+  "nb_res": 100,
+  "jobs": [
+    {
+      "id": "job_0_1996093012094528",
+      "subtime": 0.0,
+      "res": 1,
+      "profile": "profile_0",
+      "walltime": 60
+    },
+    {
+      "id": "job_1_1996093012102051",
+      "subtime": 44.0,
+      "res": 2,
+      "profile": "profile_1",
+      "walltime": 60
+    },
+    {
+      "id": "job_2_1996093012094721",
+      "subtime": 122.0,
+      "res": 1,
+      "profile": "profile_2",
+      "walltime": 60
+    },
+    {
+      "id": "job_3_1996093012094910",
+      "subtime": 241.0,
+      "res": 1,
+      "profile": "profile_3",
+      "walltime": 60
+    },
+    {
+      "id": "job_4_1996093012460607",
+      "subtime": 2173.0,
+      "res": 1,
+      "profile": "profile_4",
+      "walltime": 900
+    },
+    {
+      "id": "job_5_1996093012492331",
+      "subtime": 2387.0,
+      "res": 1,
+      "profile": "profile_5",
+      "walltime": 600
+    },
+    {
+      "id": "job_6_1996093012521432",
+      "subtime": 2565.0,
+      "res": 1,
+      "profile": "profile_6",
+      "walltime": 600
+    },
+    {
+      "id": "job_7_1996093012595304",
+      "subtime": 3051.0,
+      "res": 1,
+      "profile": "profile_7",
+      "walltime": 9000
+    },
+    {
+      "id": "job_8_1996093013012448",
+      "subtime": 3109.0,
+      "res": 1,
+      "profile": "profile_8",
+      "walltime": 600
+    },
+    {
+      "id": "job_9_1996093013052545",
+      "subtime": 3349.0,
+      "res": 1,
+      "profile": "profile_9",
+      "walltime": 600
+    },
+    {
+      "id": "job_10_1996093013100246",
+      "subtime": 3651.0,
+      "res": 1,
+      "profile": "profile_10",
+      "walltime": 600
+    },
+    {
+      "id": "job_11_1996093013244987",
+      "subtime": 4513.0,
+      "res": 1,
+      "profile": "profile_11",
+      "walltime": 600
+    },
+    {
+      "id": "job_12_1996093013264141",
+      "subtime": 4614.0,
+      "res": 1,
+      "profile": "profile_12",
+      "walltime": 3600
+    },
+    {
+      "id": "job_13_1996093013281809",
+      "subtime": 4732.0,
+      "res": 1,
+      "profile": "profile_13",
+      "walltime": 3600
+    },
+    {
+      "id": "job_14_1996093013385297",
+      "subtime": 5342.0,
+      "res": 1,
+      "profile": "profile_14",
+      "walltime": 600
+    },
+    {
+      "id": "job_15_1996093008501909",
+      "subtime": 5758.0,
+      "res": 2,
+      "profile": "profile_15",
+      "walltime": 60
+    },
+    {
+      "id": "job_16_1996093013462217",
+      "subtime": 5819.0,
+      "res": 1,
+      "profile": "profile_16",
+      "walltime": 600
+    },
+    {
+      "id": "job_17_1996093007570650",
+      "subtime": 6458.0,
+      "res": 16,
+      "profile": "profile_17",
+      "walltime": 3600
+    },
+    {
+      "id": "job_18_1996093010403091",
+      "subtime": 6566.0,
+      "res": 25,
+      "profile": "profile_18",
+      "walltime": 3600
+    },
+    {
+      "id": "job_19_1996093011455767",
+      "subtime": 6634.0,
+      "res": 8,
+      "profile": "profile_19",
+      "walltime": 2400
+    },
+    {
+      "id": "job_20_1996093012403905",
+      "subtime": 6685.0,
+      "res": 4,
+      "profile": "profile_20",
+      "walltime": 60
+    },
+    {
+      "id": "job_21_1996093012541282",
+      "subtime": 6759.0,
+      "res": 6,
+      "profile": "profile_21",
+      "walltime": 120
+    },
+    {
+      "id": "job_22_1996093012550572",
+      "subtime": 6848.0,
+      "res": 8,
+      "profile": "profile_22",
+      "walltime": 120
+    },
+    {
+      "id": "job_23_1996093012584865",
+      "subtime": 6959.0,
+      "res": 9,
+      "profile": "profile_23",
+      "walltime": 120
+    },
+    {
+      "id": "job_24_1996093012592924",
+      "subtime": 7046.0,
+      "res": 10,
+      "profile": "profile_24",
+      "walltime": 120
+    },
+    {
+      "id": "job_25_1996093013000049",
+      "subtime": 7113.0,
+      "res": 12,
+      "profile": "profile_25",
+      "walltime": 120
+    },
+    {
+      "id": "job_26_1996093013293520",
+      "subtime": 7207.0,
+      "res": 4,
+      "profile": "profile_26",
+      "walltime": 2400
+    },
+    {
+      "id": "job_27_1996093013005028",
+      "subtime": 7428.0,
+      "res": 16,
+      "profile": "profile_27",
+      "walltime": 120
+    },
+    {
+      "id": "job_28_1996093013511287",
+      "subtime": 7492.0,
+      "res": 1,
+      "profile": "profile_28",
+      "walltime": 600
+    },
+    {
+      "id": "job_29_1996093013532337",
+      "subtime": 7560.0,
+      "res": 2,
+      "profile": "profile_29",
+      "walltime": 60
+    },
+    {
+      "id": "job_30_1996093013040629",
+      "subtime": 7694.0,
+      "res": 25,
+      "profile": "profile_30",
+      "walltime": 120
+    },
+    {
+      "id": "job_31_1996093014065838",
+      "subtime": 7746.0,
+      "res": 1,
+      "profile": "profile_31",
+      "walltime": 120
+    },
+    {
+      "id": "job_32_1996093014200017",
+      "subtime": 7829.0,
+      "res": 1,
+      "profile": "profile_32",
+      "walltime": 600
+    },
+    {
+      "id": "job_33_1996093014232779",
+      "subtime": 8054.0,
+      "res": 1,
+      "profile": "profile_33",
+      "walltime": 600
+    },
+    {
+      "id": "job_34_1996093014315875",
+      "subtime": 8544.0,
+      "res": 1,
+      "profile": "profile_34",
+      "walltime": 120
+    },
+    {
+      "id": "job_35_1996093014341226",
+      "subtime": 8663.0,
+      "res": 1,
+      "profile": "profile_35",
+      "walltime": 1200
+    },
+    {
+      "id": "job_36_1996093014365130",
+      "subtime": 8889.0,
+      "res": 1,
+      "profile": "profile_36",
+      "walltime": 300
+    },
+    {
+      "id": "job_37_1996093014374401",
+      "subtime": 8944.0,
+      "res": 2,
+      "profile": "profile_37",
+      "walltime": 300
+    },
+    {
+      "id": "job_38_1996093014381613",
+      "subtime": 9010.0,
+      "res": 4,
+      "profile": "profile_38",
+      "walltime": 300
+    },
+    {
+      "id": "job_39_1996093014385287",
+      "subtime": 9082.0,
+      "res": 8,
+      "profile": "profile_39",
+      "walltime": 300
+    },
+    {
+      "id": "job_40_1996093014394542",
+      "subtime": 9162.0,
+      "res": 12,
+      "profile": "profile_40",
+      "walltime": 300
+    },
+    {
+      "id": "job_41_1996093014411691",
+      "subtime": 9211.0,
+      "res": 1,
+      "profile": "profile_41",
+      "walltime": 60
+    },
+    {
+      "id": "job_42_1996093014412997",
+      "subtime": 9271.0,
+      "res": 4,
+      "profile": "profile_42",
+      "walltime": 60
+    },
+    {
+      "id": "job_43_1996093014434068",
+      "subtime": 9312.0,
+      "res": 2,
+      "profile": "profile_43",
+      "walltime": 60
+    },
+    {
+      "id": "job_44_1996093013044149",
+      "subtime": 9484.0,
+      "res": 36,
+      "profile": "profile_44",
+      "walltime": 120
+    },
+    {
+      "id": "job_45_1996093014401798",
+      "subtime": 9595.0,
+      "res": 16,
+      "profile": "profile_45",
+      "walltime": 300
+    },
+    {
+      "id": "job_46_1996093014455576",
+      "subtime": 9683.0,
+      "res": 2,
+      "profile": "profile_46",
+      "walltime": 60
+    },
+    {
+      "id": "job_47_1996093014481356",
+      "subtime": 9742.0,
+      "res": 1,
+      "profile": "profile_47",
+      "walltime": 1800
+    },
+    {
+      "id": "job_48_1996093014410707",
+      "subtime": 9946.0,
+      "res": 24,
+      "profile": "profile_48",
+      "walltime": 300
+    },
+    {
+      "id": "job_49_1996093014414065",
+      "subtime": 10020.0,
+      "res": 9,
+      "profile": "profile_49",
+      "walltime": 60
+    }
+  ],
+  "profiles": {
+    "profile_0": {
+      "type": "delay",
+      "delay": 60
+    },
+    "profile_1": {
+      "type": "delay",
+      "delay": 60
+    },
+    "profile_2": {
+      "type": "delay",
+      "delay": 60
+    },
+    "profile_3": {
+      "type": "delay",
+      "delay": 60
+    },
+    "profile_4": {
+      "type": "delay",
+      "delay": 900
+    },
+    "profile_5": {
+      "type": "delay",
+      "delay": 600
+    },
+    "profile_6": {
+      "type": "delay",
+      "delay": 600
+    },
+    "profile_7": {
+      "type": "delay",
+      "delay": 9000
+    },
+    "profile_8": {
+      "type": "delay",
+      "delay": 600
+    },
+    "profile_9": {
+      "type": "delay",
+      "delay": 600
+    },
+    "profile_10": {
+      "type": "delay",
+      "delay": 600
+    },
+    "profile_11": {
+      "type": "delay",
+      "delay": 600
+    },
+    "profile_12": {
+      "type": "delay",
+      "delay": 3600
+    },
+    "profile_13": {
+      "type": "delay",
+      "delay": 3600
+    },
+    "profile_14": {
+      "type": "delay",
+      "delay": 600
+    },
+    "profile_15": {
+      "type": "delay",
+      "delay": 60
+    },
+    "profile_16": {
+      "type": "delay",
+      "delay": 600
+    },
+    "profile_17": {
+      "type": "delay",
+      "delay": 3600
+    },
+    "profile_18": {
+      "type": "delay",
+      "delay": 3600
+    },
+    "profile_19": {
+      "type": "delay",
+      "delay": 2400
+    },
+    "profile_20": {
+      "type": "delay",
+      "delay": 60
+    },
+    "profile_21": {
+      "type": "delay",
+      "delay": 120
+    },
+    "profile_22": {
+      "type": "delay",
+      "delay": 120
+    },
+    "profile_23": {
+      "type": "delay",
+      "delay": 120
+    },
+    "profile_24": {
+      "type": "delay",
+      "delay": 120
+    },
+    "profile_25": {
+      "type": "delay",
+      "delay": 120
+    },
+    "profile_26": {
+      "type": "delay",
+      "delay": 2400
+    },
+    "profile_27": {
+      "type": "delay",
+      "delay": 120
+    },
+    "profile_28": {
+      "type": "delay",
+      "delay": 600
+    },
+    "profile_29": {
+      "type": "delay",
+      "delay": 60
+    },
+    "profile_30": {
+      "type": "delay",
+      "delay": 120
+    },
+    "profile_31": {
+      "type": "delay",
+      "delay": 120
+    },
+    "profile_32": {
+      "type": "delay",
+      "delay": 600
+    },
+    "profile_33": {
+      "type": "delay",
+      "delay": 600
+    },
+    "profile_34": {
+      "type": "delay",
+      "delay": 120
+    },
+    "profile_35": {
+      "type": "delay",
+      "delay": 1200
+    },
+    "profile_36": {
+      "type": "delay",
+      "delay": 300
+    },
+    "profile_37": {
+      "type": "delay",
+      "delay": 300
+    },
+    "profile_38": {
+      "type": "delay",
+      "delay": 300
+    },
+    "profile_39": {
+      "type": "delay",
+      "delay": 300
+    },
+    "profile_40": {
+      "type": "delay",
+      "delay": 300
+    },
+    "profile_41": {
+      "type": "delay",
+      "delay": 60
+    },
+    "profile_42": {
+      "type": "delay",
+      "delay": 60
+    },
+    "profile_43": {
+      "type": "delay",
+      "delay": 60
+    },
+    "profile_44": {
+      "type": "delay",
+      "delay": 120
+    },
+    "profile_45": {
+      "type": "delay",
+      "delay": 300
+    },
+    "profile_46": {
+      "type": "delay",
+      "delay": 60
+    },
+    "profile_47": {
+      "type": "delay",
+      "delay": 1800
+    },
+    "profile_48": {
+      "type": "delay",
+      "delay": 300
+    },
+    "profile_49": {
+      "type": "delay",
+      "delay": 60
+    }
+  }
+}
