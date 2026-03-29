@@ -124,7 +124,7 @@ uint8_t batsim_edc_take_decisions(
 
         mb->add_execute_job(job->job_id, hosts.to_string_hyphen());
     }
-    
+
     //send respond
     mb->finish_message(parsed->now());
     serialize_message(*mb, !format_binary, const_cast<const uint8_t **>(decisions), decisions_size);
@@ -136,6 +136,7 @@ uint8_t batsim_edc_take_decisions(
 //job arrive
 void job_arrive(SchedJob* job){
     primary_queue.push_back(job);
+    backfilling_queue.push_back(job);
     std::cout << "This job arrived :" << job->job_id << " and it needs :" << (int)job->nb_hosts << "hosts" << std::endl;
 }
 
@@ -159,20 +160,55 @@ void job_finished(SchedJob* job){
 std::vector<SchedJob*> schedule() {
     std::vector<SchedJob*> launched_jobs;
 
-    while (!primary_queue.empty()) {
-        SchedJob* first_job = primary_queue.front();
+    if (primary_queue.empty())     return launched_jobs;
 
-        if (first_job->nb_hosts > available_hosts)
-            break;
+    SchedJob* first_job = primary_queue.front();
 
+    if (first_job->nb_hosts <= available_hosts){
         primary_queue.erase(primary_queue.begin());
+        backfilling_queue.erase(primary_queue.begin());
+
         running_jobs.push_back(first_job);
         available_hosts -= first_job->nb_hosts;
 
         std::cout << "Running: " << first_job->job_id << std::endl;
 
         launched_jobs.push_back(first_job); 
+        return launched_jobs;
+
+    }
+
+    //bachfilling
+    for (auto i = backfilling_queue.begin(); i != backfilling_queue.end(); ) {
+        SchedJob* job = *i;
+
+        // don't take priority job
+        if (job == first_job) {
+            ++i;
+            continue;
+        }
+
+        if (job->nb_hosts <= available_hosts) {
+            running_jobs.push_back(job);
+            available_hosts -= job->nb_hosts;
+
+            std::cout << "Running (BACKFILL): " << job->job_id << std::endl;
+
+            launched_jobs.push_back(job);
+
+            i = backfilling_queue.erase(i);
+
+            auto i2 = std::find(primary_queue.begin(), primary_queue.end(), job);
+            if (i2 != primary_queue.end())
+                primary_queue.erase(i2);
+        }
+        else {
+            ++i;
+        }
     }
 
     return launched_jobs;
 }
+    
+
+    
