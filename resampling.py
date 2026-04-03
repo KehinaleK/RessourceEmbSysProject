@@ -13,9 +13,11 @@ def easyGeneration(numOfWeeks, weeklyActivity):
     idSuffixe = 0
     for i in range(numOfWeeks):
         for user, weeks in weeklyActivity.items():
-            # maybe try without avoiding empty weeks ! We'll have to see
-            submissionWeeks = [subs for week, subs in weeks.items() if len(subs) > 0]
+            # If we get an empty week, then we go onto the next user.
+            submissionWeeks = [subs for week, subs in weeks.items()]
             randomUserWeeks = random.choice(submissionWeeks)
+            if len(randomUserWeeks) == 0:
+                continue
             for randomUserWeek in randomUserWeeks:
                 ogStartDay = datetime.strptime(randomUserWeek[3], '%Y-%m-%d').weekday() # we get if it's a monday, thursday etc...
                 ogStartTime = datetime.strptime(randomUserWeek[4], '%H:%M:%S').time() # and the time ! 
@@ -43,7 +45,7 @@ def easyGeneration(numOfWeeks, weeklyActivity):
         genTraceStart += timedelta(days=6)
 
     df = pd.DataFrame(genTrace)
-    df.to_csv("analysis/resampling/ResampleTrace50.csv")
+    df.to_csv("analysis/ResampleTrace.csv")
 
 
 if __name__ == "__main__":
