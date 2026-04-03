@@ -43,7 +43,7 @@ def easyGeneration(numOfWeeks, weeklyActivity):
         genTraceStart += timedelta(days=6)
 
     df = pd.DataFrame(genTrace)
-    print(df)
+    df.to_csv("analysis/resampling/ResampleTrace50.csv")
 
 
 if __name__ == "__main__":
