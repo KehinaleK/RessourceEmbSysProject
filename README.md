@@ -2,21 +2,90 @@
 Repository for the Ressource for Embedded Systems project. 
 This project aims at reproducing some of the experiments from the [Tuning EASY-Backfilling Queues paper](https://www.researchgate.net/publication/323419965_Tuning_EASY-Backfilling_Queues).
 
-## Resampling
+# Resampling
 
-When it comes to the resampling method used to reproduce the experiment, we based it on the paper that was quoted in the one we chose. Our paper does not detail MUCH how they resample they data, although it is similar on surface-level to the one we based our logic on. There is no confirmation that the authors of our paper did proceed with every single step, but, we did (in case).
-These steps are common in other works about resampling, however, we do not exclude the possibility that some steps may have been misinterpreted. In the situations where doubt arose, we chose what we saw in other papers and what felt more logical for our projet.
+The studied paper uses resampling, a method aiming to create new samples based on observed ones. They use resampling on five different workloads: KTH-SP2, CTC-SP2, SDSC-SP2, SDSC-BLUE, and CEA-curie. When it comes to reproducing their experiments, **we only use the KTH-SP2 workload.** 
 
-In [Resampling with Feedback: A New Paradigm of Using Workload Data for Performance Evaluation (Extended Version)](https://dl.acm.org/doi/10.1007/978-3-030-88224-2_1) authors propose the following method. 
+## MANUAL
 
-### User categorisation
+Before anything, resampling is made possible by the `resampling.py` script. 
 
-The authors start by selecting pools of users based on their activities: 
-- Users whose submissions only span over the first or last 5% of the trace are excluded from the data. 
-- Users are divided into **long term users** and **temporary users**. Long term users are users whose **submission span (date_of_last_submission - date_of_last_submission) are greater than total_days / 2 are considered long term users**. Users whose **submission spans are lower than than average are considered temporary users**.
-### Initialisation
+- **Command line:**
+```bash
+python3 resampling.py -w 10
+```
+With `-w` being the number of desired synthetic weeks. 
+The script uses the `weeklyActivity.json` file.
+
+## Paper methodology
+
+The paper uses a simple resampling method, consisting in creating new weeks worth of submissions by randomly selecting one week from each user in the original trace. 
+
+### Inspiration and limitations
+
+The authors cite the [Resampling with Feedback: A New Paradigm of Using Workload Data for Performance Evaluation (Extended Version)](https://dl.acm.org/doi/10.1007/978-3-030-88224-2_1) paper as the main inspiration for resampling. However, this paper proposes a more complex form of resampling described below:
+- First; they use a form of **user-modelling resampling**, which means that they select users based on different characteristics before creating new samples. 
+    - Users whose submissions only span over the first or last 5% of the trace are excluded from the data. 
+    - Users are divided into **long term users** and **temporary users**. Long term users are users whose **submission span (date_of_last_submission - date_of_last_submission) are greater than total_days / 2 are considered long term users**. Users whose **submission spans are lower than than average are considered temporary users**.
+    - For each synthetic week, only a portion of the temporary users is chose, to match the number of average temporary users in the original trace. 
+- Second, they propose using the notion of **feedback**. Feedback in resampling means that job submissions are not fixed in advance, but depend on how the system behaves. Instead of replaying the exact timestamps from the original trace, each user submits a new job only after their previous one has finished (often with some delay). This models real behavior more closely, since users typically wait for results before continuing.
+
+## Reproduction
+
+We decided to reproduce the resampling in the studied paper ([Tuning EASY-Backfilling Queues paper](https://www.researchgate.net/publication/323419965_Tuning_EASY-Backfilling_Queues).) which does not include user-modelling and feedback. We, however, decided to analyse users within the original trace to see how user-modelling would have changed the resampling.
+
+### 1. Re-structuring the data
+
+To reproduce the resampling, we first decided to re-organise the KTH-SP2 workload into a new structure to ease sample creation.
+For each user, we collected their jobs and sorted them by date in a `JSON` file.
+
+![weeklyActivity](doc/weeklyActivity.png)
+
+Above is a screenshot from this new structure. Each user is associated with a list of dictionnaries. For each week in the original trace (fom monday to sunday included), the jobs submitted by the user are gathered.
+
+![weeklyActivityExtended](doc/weeklyActivityExtended.png)
+
+Above is an example for the user `tfktm`. We can see for instance that they submitted one job during the week starting on November 18th 1996. They then did not submitted any job the following week. They however submitted 3 jobs during the weel starting on December 2nd 1996.
+
+### 2. Synthetic weeks creation
+
+The `resampling.py` script can then be used with the the previously created `JSON` file to produce a new `txt` file, in the exact same format of the original trace, but with synthetic weeks for content. 
 
 
-Once users are categorised, we initialise a set of active users:
-- The **default number of long term users per week is the same one as the number of long term users present in the whole original trace**. 
-- The **number of temporary users per week is the same one as the number of average temporary users per week in the original trace**.
+A synthetic week is generated by randomly selecting, for each user in the original trace, one week of job submissions from their history. Since the paper does not specify how to handle inactive periods, we only sample from weeks in which the user has at least one submission. As a result, every user contributes at least one job to each synthetic week.
+
+For each generated week, submission timestamps are adjusted to fit the synthetic timeline while preserving their relative position within the week.
+
+More concretly, if a job was originally submitted on a given day of the week (Thursday or Sunday), then it will be placed on the same day in the synthetic week. Only the absolute date is changed; the position within the week is preserved. Job ids are modified accordingly. Other job attributes, such as runtime or required processors, remain unchanged. Below is an example.
+
+
+**User random week**
+
+| Original Date | Day       | Job ID | Runtime | Procs |
+|--------------|----------|--------|--------:|------:|
+| 1997-03-13   | Thursday | 19970313     | 2h      | 4     |
+| 1997-03-16   | Sunday   | 19970313     | 1h      | 2     |
+
+---
+
+**Synthetic week**
+
+Assuming that the synthetic week starts on 1996-01-01 (The first week of the resampling always starts on this date!), then:
+
+- Thursday → 1996-01-04  
+- Sunday → 1996-01-07  
+
+
+**Generated synthetic jobs**
+
+| Synthetic Date | Day       | New Job ID | Runtime | Procs |
+|---------------|----------|------------|--------:|------:|
+| 1996-01-04    | Thursday | 19960104       | 2h      | 4     |
+| 1996-01-07    | Sunday   | 19960107        | 1h      | 2     |
+
+**Output:** 
+À faire since needs a new format for batsim input!
+
+## Resampling analysis
+
+INCOMING!!
