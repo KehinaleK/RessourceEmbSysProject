@@ -81,7 +81,37 @@ Assuming that the synthetic week starts on 1996-01-01 (The first week of the res
 
 **Output:** 
 À faire since needs a new format for batsim input!
-
 ## Resampling analysis
 
-INCOMING!!
+After completing the resampling script, we decided to analyse the generated traces to determine whether they could indeed be compared to the original workload.
+
+**We generated 50 weeks five times in a row and then analysed the values of specific metrics. The numbers given for the resampled data therefore correspond to the average over these five traces.**
+
+### General metrics
+
+First and foremost, as shown in the table below, the total numbers of submitted jobs in both traces are very close. This result supports our earlier decision not to enforce the absence of empty submission weeks in the list of weeks that can be randomly selected. Only one user from the original trace is absent in the resampled one. Overall, the resampled trace appears to be close to the original one.
+
+| Trace | Total Job Submissions | Total Unique Users |
+|---|---:|---:|
+| **Original** | 28,491 | 189 |
+| **Resampled** | 29,103 | 188 |
+
+We then looked more specifically at user modelling. As explained previously, no user modelling was applied during the resampling process, unlike in the approach described in the paper [Resampling with Feedback: A New Paradigm of Using Workload Data for Performance Evaluation (Extended Version)](https://dl.acm.org/doi/10.1007/978-3-030-88224-2_1). Since the authors of the paper we aim to reproduce mentioned this lack of modelling as a possible limitation, we decided to analyse the data to see whether the resampling still preserved values similar to the original trace regarding user types and their submissions.
+
+To do so, we examined the original trace and identified all long-term and temporary users according to the methodology presented in the previous sections. We then used these lists to detect both types of users in the resampled data.
+
+![Og vs Resampled data, overall metrics](doc/totalMetricsResample.png)
+
+In the figure above, we can see that the numbers of temporary and long-term users are almost the same in both traces, although there are slightly more temporary users in the resampled one.
+
+### Average metrics
+
+We then decided to examine several metrics related to weekly submissions. **In the original trace, around 600 jobs are submitted each week, compared with 582 in the resampled one.**
+
+Regarding the number of users per week, we looked at how many users submitted at least one job each week, for each user type. We chose these values because the user-modelling method described above would include a specific number of temporary users each week in order to match the average number of temporary users in the original data.
+
+![Og vs Resampled data, average metrics](doc/avgMetricsResample.png)
+
+As shown above, just as for the absolute metrics, there is almost no difference in the number of users submitting at least one job each week.
+
+This shows that, even without implementing user modelling, and by simply using random selection of submissions regardless of the user, the resampling method still generates a trace that shows similar trends in submissions based on user type. **This suggests that the absence of user modelling should not significantly influence the trends observed when reproducing the experiments**, although other factors, such as job size or power requirements, could still have an impact.
