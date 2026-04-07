@@ -57,10 +57,10 @@ def convertToSeconds(timeStr):
         hours = int(parts[0])
         minutes = int(parts[1])
     else:
-        hours = 0
-        minutes = int(parts[0])
-
+        hours = int(parts[0])
+        minutes = 0
     return hours * 3600 + minutes * 60
+
 def saveToBatsimFormat(genTrace):
 
     jobs_tmp = []
@@ -69,13 +69,17 @@ def saveToBatsimFormat(genTrace):
         waitingTimeInSeconds = convertToSeconds(genTrace["twait"][submission])
         startTime = genTrace["tstart"][submission]
         submittingTime = startTime - timedelta(seconds=waitingTimeInSeconds)
+        print(f"WALL TIME : {genTrace['treq'][submission]}, ACTUALRUNNINGTIME : {genTrace['uwall'][submission]}")
         walltimeInSeconds = convertToSeconds(genTrace["treq"][submission])
+        actualRunningTime = convertToSeconds(genTrace["uwall"][submission])
+        print(f"WALL TIME : {walltimeInSeconds}, ACTUALRUNNINGTIME : {actualRunningTime}")
 
         jobs_tmp.append({
             "id": genTrace["jid"][submission],
             "submit_datetime": submittingTime,
             "walltime": walltimeInSeconds,
             "res": int(genTrace["npe"][submission]),
+            "rt" : actualRunningTime
         })
 
     # Submission times must start at 0 so we shift everything
@@ -85,19 +89,22 @@ def saveToBatsimFormat(genTrace):
     profiles = {}
 
     for job in jobs_tmp:
-        walltime = int(job["walltime"])
-        profile_name = f"delay_{walltime}"
+
+        actualRunningTime = int(job["rt"]) 
+        if actualRunningTime == 0:
+            actualRunningTime += 1
+        profile_name = f"delay_{actualRunningTime}"
 
         if profile_name not in profiles:
             profiles[profile_name] = {
-                "type": "delay",
-                "delay": walltime
+                "type": "DelayProfile",
+                "delay": actualRunningTime
             }
 
         jobs.append({
             "id": job["id"],
             "subtime": int((job["submit_datetime"] - origin).total_seconds()),
-            "walltime": walltime,
+            "walltime": int(job["walltime"]),
             "res": int(job["res"]),
             "profile": profile_name
         })
@@ -105,7 +112,7 @@ def saveToBatsimFormat(genTrace):
     jobs.sort(key=lambda x: (x["subtime"], x["id"]))
 
     batsim_workload = {
-        "nb_res": 128,
+        "nb_res": 256,
         "jobs": jobs,
         "profiles": profiles
     }
