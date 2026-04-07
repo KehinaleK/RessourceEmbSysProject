@@ -8,6 +8,7 @@
 #include <cstdio>
 #include <cmath>
 #include <iostream>
+#include <sstream>
 
 #include <batprotocol.hpp>
 #include <intervalset.hpp>
@@ -15,7 +16,7 @@
 
 using namespace batprotocol;
 
-
+// Get the policies from the bash script. 
 
 // All available sorting policies for the queues
 enum class QueuePolicy {
@@ -27,6 +28,18 @@ enum class QueuePolicy {
     LQF,   // Largest-resource-requirement-First  : most hosts first
     EXP    // Expansion Factor : (wait + walltime) / walltime
 };
+
+// and then we can parse the arguments from the bash script
+
+static QueuePolicy parse_policy(const std::string & s) {
+    if (s == "FCFS") return QueuePolicy::FCFS;
+    if (s == "LCFS") return QueuePolicy::LCFS;
+    if (s == "SPF")  return QueuePolicy::SPF;
+    if (s == "LPF")  return QueuePolicy::LPF;
+    if (s == "SQF")  return QueuePolicy::SQF;
+    if (s == "LQF")  return QueuePolicy::LQF;
+    if (s == "EXP")  return QueuePolicy::EXP;
+}
 
 // A job waiting in the queue
 struct SchedJob {
@@ -291,13 +304,22 @@ extern "C" uint8_t batsim_edc_init(
     uint8_t ** reply_data,
     uint32_t * reply_size)
 {
-    (void)data;
-    (void)size;
-
     if (flags == nullptr || reply_data == nullptr || reply_size == nullptr) {
         std::printf("Invalid init pointers\n");
         return 1;
     }
+
+    // to get the args from the bash script
+    std::string args((const char*)data, size); 
+    std::stringstream ss(args);
+
+    std::string str1, str2;
+    ss >> str1 >> str2;
+
+    if (!str1.empty()) primary_policy = parse_policy(str1);
+    if (!str2.empty()) backfill_policy = parse_policy(str2);
+
+    std::cout << "PRIMARY POLICY IS =" << str1 << " AND BACKFILLING =" << str2 << "\n";
 
     *flags = BATSIM_EDC_FORMAT_BINARY;
     format_binary = true;
