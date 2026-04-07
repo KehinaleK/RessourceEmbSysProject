@@ -11,11 +11,10 @@ if [[ $# -ne 2 ]]; then
     exit 1
 fi
 
-
-
-OUTPUTDIR = "outputs/${PRIMARY}_${BACKFILLING}"
-LOGDIR = "logs/${PRIMARY}_${BACKFILLING}"
-mkdir "$OUTPUTDIR"
+OUTPUTDIR="outputs/${PRIMARY}_${BACKFILLING}"
+LOGDIR="logs/${PRIMARY}_${BACKFILLING}"
+mkdir -p "$OUTPUTDIR"
+mkdir -p "$LOGDIR"
 
 echo "Simulation will run with ${PRIMARY} policy and ${BACKFILLING} policy!"
 echo "Logs will be saved in ${LOGDIR} and outputs in ${OUTPUTDIR}."
@@ -24,7 +23,7 @@ echo "Logs will be saved in ${LOGDIR} and outputs in ${OUTPUTDIR}."
 batsim \
   -p assets/plateform.xml \
   -w assets/jobs.json \
-  -l ./build/libeasy_tuning.so "$PRIMARY $BACKFILL" \
-  -e "$OUTDIR" \
+  -l ./build/libeasy_tuning.so "$PRIMARY $BACKFILLING" \
+  -e "$OUTPUTDIR/" \
   > "$LOGDIR/log.txt"
 
