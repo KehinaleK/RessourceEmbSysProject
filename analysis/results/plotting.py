@@ -25,24 +25,24 @@ def generalisationPlotStarter(trainDebugDict, testDebugDict, anchorValueTrain, a
     test_relative = []
     labels = []
     percentageChanges = {}
-    primaryMarkers = {
+    backfillingMarkers = {
         "EXP": "o",
         "FCFS": "^",
-        "LCFS": "*",
-        "LPF": "X",
+        "LCFS": '+',
+        "LPF": 'x',
         "LQF": "D",
         "SPF": "v",   
         "SQF": "s"
     }
 
-    backfillingColours = {
-        "EXP": "#856793",
-        "FCFS": "#3d7afd",
-        "LCFS": "#ca6641",
-        "LPF": "#75b84f",
-        "LQF": "#ffdf22",
-        "SPF": "#fe86a4",
-        "SQF": "#be0119"
+    primaryColours = {
+        "EXP": "#137e6d",
+        "FCFS": "#dc4d01",
+        "LCFS": "#665fd1",
+        "LPF": "#de0c62",
+        "LQF": "#63a950",
+        "SPF": "#f9bc08",
+        "SQF": "#a87900"
     }
 
 
@@ -75,8 +75,8 @@ def generalisationPlotStarter(trainDebugDict, testDebugDict, anchorValueTrain, a
     # Plot to connect the points
     for i, key in enumerate(labels):
         left_policy, right_policy = key.split("_")
-        marker = primaryMarkers.get(left_policy)
-        color = backfillingColours.get(right_policy)
+        marker = backfillingMarkers.get(right_policy)
+        color = primaryColours.get(left_policy)
 
         y1 = train_relative[i]
         y2 = test_relative[i]
@@ -116,26 +116,25 @@ def generalisationPlotStarter(trainDebugDict, testDebugDict, anchorValueTrain, a
 
     
     primary_handles = []
-    for policy, marker in primaryMarkers.items():
+    for policy, colour in primaryColours.items():
         primary_handles.append(
-            Line2D([0], [0],
-                marker=marker,
-                color='black',
-                linestyle='None',
-                markersize=6,
-                markerfacecolor='none',
-                markeredgewidth=0.8,
-                label=policy)
-        )
+              Line2D([0], [0],
+               color=colour,
+               linewidth=1.5,
+               label=policy))
 
         bf_handles = []
-        for policy, color in backfillingColours.items():
+        for policy, marker in backfillingMarkers.items():
             bf_handles.append(
                 Line2D([0], [0],
-                    color=color,
-                    linewidth=1.5,
-                    label=policy)
-            )
+               marker=marker,
+               color='black',
+               linestyle='None',
+               markersize=6,
+               markerfacecolor='none',
+               markeredgewidth=0.8,
+               label=policy))
+
 
     legend1 = ax.legend(handles=primary_handles,
                         title="Primary Policy",
