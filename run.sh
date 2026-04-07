@@ -4,13 +4,14 @@ PRIMARY=$1
 BACKFILLING=$2
 
 # To ensure we give both!
-
-if [ -z "$PRIMARY" ] || [ -z "$BACKFILL" ]; then
+if [[ $# -ne 2 ]]; then
     echo "Policies for both PRIMARY and BACKFILLING QUEUES MUST BE PROVIDED"
     echo "Usage: ./run.sh PRIMARY BACKFILLING"
     echo "Example: ./run.sh FCFS SPF"
     exit 1
 fi
+
+
 
 OUTPUTDIR = "outputs/${PRIMARY}_${BACKFILLING}"
 LOGDIR = "logs/${PRIMARY}_${BACKFILLING}"
