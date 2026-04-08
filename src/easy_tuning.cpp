@@ -86,6 +86,9 @@ static uint64_t next_arrival_order = 0;
 // Active sorting policies
 static QueuePolicy primary_policy  = QueuePolicy::FCFS;
 static QueuePolicy backfill_policy = QueuePolicy::FCFS;
+// Example: 20.0 * 3600.0 to get the threshold in seconds
+static double threshold_seconds = 0.0;
+
 
 
 // Higher score = job has waited long relative to its size
@@ -147,6 +150,7 @@ static bool compare_jobs(const JobView & a, const JobView & b,
         }
 
         default:
+            // Default to FCFS ! 
             return (a.submit_time != b.submit_time)
                    ? a.submit_time < b.submit_time
                    : a.arrival_order < b.arrival_order;
