@@ -6,6 +6,8 @@ import argparse
 
 def easyGeneration(numOfWeeks, weeklyActivity):
 
+    weeklyActivity = filtering(weeklyActivity)
+
     genTraceStart = datetime.strptime("1996-01-01", '%Y-%m-%d') 
     genTrace = {"week" : [], "usr" : [], "cac" : [], "jid" : [], "req" : [], "tstart" : [], "tstop" : [], 
                 "npe" : [], "treq" : [], "uwall" : [], "reqcpu" : [], "ucpu" : [], "twait" : []} 
@@ -50,6 +52,17 @@ def easyGeneration(numOfWeeks, weeklyActivity):
     # df.to_csv("analysis/ResampleTrace.csv")
 
     return genTrace
+
+def filtering(weeklyActivity):
+
+    for user, weeks in weeklyActivity.items():
+        for week, subs in weeks.items():
+            weeks[week] = [
+                sub for sub in subs
+                if int(sub[7]) <= 100 and convertToSeconds(sub[9]) <= convertToSeconds(sub[8])
+            ]
+
+    return weeklyActivity
 
 def convertToSeconds(timeStr):
     parts = timeStr.strip().split("h")
@@ -130,7 +143,7 @@ def saveToBatsimFormat(genTrace):
     jobs.sort(key=lambda x: (x["subtime"], x["id"]))
 
     batsim_workload = {
-        "nb_res": 256,
+        "nb_res": 100,
         "jobs": jobs,
         "profiles": profiles
     }
