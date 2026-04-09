@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-ROOT_DIR = "../../../outputs/test/T0"
+ROOT_DIR = "../../../outputs/test/T1"
 
 POLICY_ORDER = ["EXP", "FCFS", "LCFS", "LPF", "LQF", "SPF", "SQF"]
 
@@ -36,9 +36,11 @@ def parse_policy_pair(folder_name: str):
     return parts[0].upper(), parts[1].upper()
 
 
-def get_all_waiting_times(file_path):
+def getDeciles(file_path):
     df = pd.read_csv(file_path)
-    return df["waiting_time"].to_numpy()
+    df["week"] = df["job_id"].astype(str).str[:9]
+    weekly_avg = df.groupby("week")["waiting_time"].mean().values
+    return np.percentile(weekly_avg, 10), np.percentile(weekly_avg, 90)
 
 
 rows = []
@@ -51,9 +53,7 @@ for subdir in sorted(os.listdir(ROOT_DIR)):
 
     primary, backfilling = pair
 
-    all_waiting_times = get_all_waiting_times(jobs_path)
-    p10 = np.percentile(all_waiting_times, 10)
-    p90 = np.percentile(all_waiting_times, 90)
+    p10, p90 = getDeciles(jobs_path)
 
     with open(schedule_path, "r") as f:
         data = json.load(f)
