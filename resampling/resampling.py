@@ -10,6 +10,8 @@ def easyGeneration(numOfWeeks, weeklyActivity):
     genTrace = {"week" : [], "usr" : [], "cac" : [], "jid" : [], "req" : [], "tstart" : [], "tstop" : [], 
                 "npe" : [], "treq" : [], "uwall" : [], "reqcpu" : [], "ucpu" : [], "twait" : []} 
 
+
+    random.seed(10)
     idSuffixe = 0
     for i in range(numOfWeeks):
         for user, weeks in weeklyActivity.items():
@@ -26,7 +28,7 @@ def easyGeneration(numOfWeeks, weeklyActivity):
                 numDays = ogEndDay - ogStartDay
                 newStartDay = genTraceStart + timedelta(days=ogStartDay) # if monday (0), then it's still 0, otherwise we shift the day
                 newEndDay = newStartDay + timedelta(days=numDays)
-                newStartDayStr = newStartDay.strftime('%Y-%m-%d')
+                newStartDayStr = newStartDay.strftime('%Y-%m-%d')   
                 genTrace["week"].append(i)
                 genTrace["usr"].append(user)
                 genTrace["cac"].append(randomUserWeek[0])
@@ -63,36 +65,47 @@ def convertToSeconds(timeStr):
 
 def saveToBatsimFormat(genTrace):
 
+
     jobs_tmp = []
 
-    for submission in range(len(genTrace["jid"])):
+    for submission in range(len(genTrace["jid"]) - 500):
         waitingTimeInSeconds = convertToSeconds(genTrace["twait"][submission])
         startTime = genTrace["tstart"][submission]
+
         submittingTime = startTime - timedelta(seconds=waitingTimeInSeconds)
-        print(f"WALL TIME : {genTrace['treq'][submission]}, ACTUALRUNNINGTIME : {genTrace['uwall'][submission]}")
+
         walltimeInSeconds = convertToSeconds(genTrace["treq"][submission])
         actualRunningTime = convertToSeconds(genTrace["uwall"][submission])
-        print(f"WALL TIME : {walltimeInSeconds}, ACTUALRUNNINGTIME : {actualRunningTime}")
 
         jobs_tmp.append({
             "id": genTrace["jid"][submission],
             "submit_datetime": submittingTime,
             "walltime": walltimeInSeconds,
             "res": int(genTrace["npe"][submission]),
-            "rt" : actualRunningTime
+            "rt": actualRunningTime
         })
 
-    # Submission times must start at 0 so we shift everything
+
+    ## had to clean that bc some jobs were just submitted way to early
+
+    cutoff_date = datetime(1996, 1, 1)
+
+    before_count = len(jobs_tmp)
+    jobs_tmp = [job for job in jobs_tmp if job["submit_datetime"] >= cutoff_date]
+    after_count = len(jobs_tmp)
+
+    print(f"[CLEANUP] Removed {before_count - after_count} jobs before {cutoff_date}")
     origin = min(job["submit_datetime"] for job in jobs_tmp)
+    print("[ORIGIN]", origin)
 
     jobs = []
     profiles = {}
 
     for job in jobs_tmp:
-
-        actualRunningTime = int(job["rt"]) 
+        actualRunningTime = int(job["rt"])
         if actualRunningTime == 0:
-            actualRunningTime += 1
+            actualRunningTime = 1
+
         profile_name = f"delay_{actualRunningTime}"
 
         if profile_name not in profiles:
@@ -101,13 +114,18 @@ def saveToBatsimFormat(genTrace):
                 "delay": actualRunningTime
             }
 
+        subtime = int((job["submit_datetime"] - origin).total_seconds())
+
         jobs.append({
             "id": job["id"],
-            "subtime": int((job["submit_datetime"] - origin).total_seconds()),
+            "subtime": subtime,
             "walltime": int(job["walltime"]),
             "res": int(job["res"]),
             "profile": profile_name
         })
+
+        print(job["id"], job["submit_datetime"], "-> subtime =", subtime)
+
 
     jobs.sort(key=lambda x: (x["subtime"], x["id"]))
 
@@ -117,7 +135,8 @@ def saveToBatsimFormat(genTrace):
         "profiles": profiles
     }
 
-    with open("jobs.json", "w") as f:
+    # output one
+    with open("testInput.json", "w") as f:
         json.dump(batsim_workload, f, indent=2)
 
 if __name__ == "__main__":
@@ -128,7 +147,8 @@ if __name__ == "__main__":
 
     numOfWeeks = args.numberOfWeeks
 
-    with open('weeklyActivity.json', 'r') as JSON:
+    # input file! on github
+    with open('testSubs.json', 'r') as JSON:
         weeklyActivity = json.load(JSON)
 
     genTrace = easyGeneration(numOfWeeks, weeklyActivity)
