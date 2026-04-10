@@ -20,7 +20,7 @@
       inputs.flake-utils.follows = "flake-utils";
     };
     batsim-flake = {
-      url = "git+https://framagit.org/batsim/batsim?ref=batprotocol";
+      url = "git+https://framagit.org/batsim/batsim?ref=main";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nur-kapack.follows = "nur-kapack";
       inputs.batprotocol.follows = "batprotocol-flake";
@@ -36,9 +36,9 @@
         py = pkgs.python3;
         pyPkgs = pkgs.python3Packages;
         kapack = nur-kapack.packages.${system};
-        batprotopkgs = batprotocol-flake.packages-debug.${system};
-        intervalsetpkgs = intervalset-flake.packages-debug.${system};
-        batpkgs = batsim-flake.packages-debug.${system};
+        batprotopkgs = batprotocol-flake.packages.${system};
+        intervalsetpkgs = intervalset-flake.packages.${system};
+        batpkgs = batsim-flake.packages.${system};
       in rec {
         packages = rec {
           docker-container = pkgs.dockerTools.streamNixShellImage {
@@ -64,9 +64,6 @@
               # runtime deps
               gdb cgdb
             ];
-
-            DEBUG_SRC_DIRS = batpkgs.batsim.DEBUG_SRC_DIRS ++ batprotopkgs.batprotocol-cpp.DEBUG_SRC_DIRS ++ intervalsetpkgs.intervalset.DEBUG_SRC_DIRS;
-            GDB_DIR_ARGS = batpkgs.batsim.GDB_DIR_ARGS ++ batprotopkgs.batprotocol-cpp.GDB_DIR_ARGS ++ intervalsetpkgs.intervalset.GDB_DIR_ARGS;
 
             hardeningDisable = [ "fortify" ];
             shellHook = ''
