@@ -3,7 +3,7 @@
 <platform version="4.1">
   <zone id="AS0" routing="Full">
     <cluster
-      id="A" prefix="a" suffix="" radical="0-255"
+      id="A" prefix="a" suffix="" radical="0-99"
       speed="1Gf"
       bw="1GBps" lat="5us"
       bb_bw="3GBps" bb_lat="3us"
