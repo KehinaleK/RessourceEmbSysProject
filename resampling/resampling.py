@@ -59,7 +59,7 @@ def filtering(weeklyActivity):
         for week, subs in weeks.items():
             weeks[week] = [
                 sub for sub in subs
-                if int(sub[7]) <= 100 and convertToSeconds(sub[9]) <= convertToSeconds(sub[8])
+                if int(sub[7]) <= 100 and convertToSeconds(sub[9]) < convertToSeconds(sub[8])
             ]
 
     return weeklyActivity
