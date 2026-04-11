@@ -3,8 +3,10 @@ import numpy as np
 from utils import *
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 
-ROOT_DIR = "../../../outputs/test/T0"
+
+ROOT_DIR = "../../../outputs/train/T0"
 
 POLICY_ORDER = ["EXP", "FCFS", "LCFS", "LPF", "LQF", "SPF", "SQF"]
 
@@ -107,6 +109,62 @@ ax.axhline(0, color="gray", linewidth=1, alpha=0.6)
 
 ax.set_xlabel("AvgWait cost relative to FCFS–FCFS")
 ax.set_ylabel("MaxWait cost relative to FCFS–FCFS")
+
+backfillHandles = []
+for name in POLICY_ORDER:
+    m = MARKERS[name]
+    if name in {"LCFS", "LPF"}:
+        h = Line2D(
+            [0], [0],
+            marker=m,
+            linestyle="None",
+            color="black",
+            markersize=11,
+            label=name.lower()
+        )
+    else:
+        h = Line2D(
+            [0], [0],
+            marker=m,
+            linestyle="None",
+            color="black",
+            markerfacecolor="none",
+            markeredgecolor="black",
+            markersize=11,
+            label=name.lower()
+        )
+    backfillHandles.append(h)
+
+primaryHandles = [
+    Line2D(
+        [0], [0],
+        marker="o",
+        linestyle="-",
+        color=COLOURS[name],
+        markerfacecolor=COLOURS[name],
+        markeredgecolor=COLOURS[name],
+        linewidth=2,
+        markersize=9,
+        label=name.lower()
+    )
+    for name in POLICY_ORDER
+]
+
+legend1 = ax.legend(
+    handles=backfillHandles,
+    title="Backfilling",
+    loc="upper left",
+    bbox_to_anchor=(1.05, 1),
+    frameon=False)
+
+legend2 = ax.legend(
+    handles=primaryHandles,
+    title="Primary",
+    loc="upper left",
+    bbox_to_anchor=(1.05, 0.5),
+    frameon=False ) 
+
+ax.add_artist(legend1)
 
 plt.tight_layout()
 plt.show()
