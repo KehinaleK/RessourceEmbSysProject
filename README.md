@@ -33,6 +33,16 @@ Below is a table of contents listing all of the sections in the `README`.
     - [EASY algorithm, step by step](#easy-algorithm-step-by-step)
     - [Batsim interface](#batsim-interface)
 - [Results](#results)
+  - [Simulations](#simulations)
+  - [Policy performances](#policy-performances)
+    - [Paper results](#paper-results)
+    - [Our results](#our-results)
+  - [Threshold impact](#threshold-impact)
+    - [Paper results](#paper-results-1)
+    - [Our results](#our-results-1)
+  - [Train/Test generalisation](#traintest-generalisation)
+    - [Paper results](#paper-results-2)
+    - [Our result](#our-result)
 
 
 # Repository Overview
@@ -434,3 +444,71 @@ Four event types are handled inside `batsim_edc_take_decisions`:
 - **`EDCHelloEvent`**: handled in `batsim_edc_init` directly (scheduler sends its name and version)
 
 # Results
+
+## Simulations
+
+Two batches of simulations where ran, one on the training set `trainInput.json` and one on the `testInput.json`, both different resampled data from the ones used for the resampling analysis. 
+
+The `trainInput.json` contains **23983** job submissions, and `testInput.json` **27489** ones. 100 machines are made available follwing the paper experimental conditions. 
+
+All possible 49 policy combinations were tested and used for simulation, with, and without threshold, resulting in **196 simulations total**. 
+
+## Policy performances
+
+Since all simulations were ran, we decided to first reproduce the following plots from the paper. 
+
+### Paper results
+
+![Policy combinations results from the paper](doc/policiesMetricsWithoutTPaper.png)
+
+It shows how each combination performs on 250 generated weeks compared to the FCFS-FCFS combination often used as a baseline in their experiments. Each policy is represented by a colour, and a marker. The horizontal interval for each combination corresponds to the limits of the first and last decile of jobs' average waiting times (per week). 
+
+### Our results
+
+Below is a replicated plot using results from the 49 simulation on the **train** set without the 20h threshold.
+
+![Policy combinations results from our simulations](analysis/results/outputs/policiesMetricsWithoutT.png)
+
+Overall, the order of the policies in therm of maximum waiting time is the same in both plots, which implies a loyal implementation of each policy. The deciles values are much more extremes than in the original paper. We think that this could be due to the data, since we only used 50 generated weeks from one single workload, against 250 from 5 different ones. We do not know how large jobs in other workloads are and if they balance out some in the KTH one. In addition, since the workload is smaller, extreme values have more impact on the deciles values.
+
+## Threshold impact
+
+### Paper results 
+
+This figure shows all the policy combinations. Colors correspond to the primary policies. The transparent points are without the threshold (T = 20h), and the solid ones are with the threshold.
+
+![Threshold results from the paper](doc/withVSwithoutTPaper.png)
+
+### Our results 
+
+![Threshold results from our simulations](analysis/results/outputs/withVSwithoutT.png)
+
+
+Overall, the trends are pretty much the same as in the paper. For example, LCFS and SQF clearly have the most extreme values, and SPF and EXP are both to the left of FCFS, meaning better average waiting times. The effect of the threshold also matches what they describe: it significantly reduces MaxWait, while pushing all AvgWait values back towards the FCFS–FCFS baseline.
+
+We furthermore made a version without SQF, since it compresses everything else and makes smaller differences harder to see. Without it, you can better notice things like LCFS being faster than FCFS in average waiting time when there’s no threshold.
+
+Some small differences with the paper are expected, since we are only using the KTH SP2 workload, while they use five different workloads.
+
+Version without SQF.
+
+![Threshold results from our simulations](analysis/results/outputs/withVSwithoutTnoSQF.png)
+
+
+## Train/Test generalisation
+
+### Paper results
+![Generalisation with the threshold from the Paper](doc/Selection_1693.png)
+The paper results show that training and testing sets have comparable performances, making the conclusions established on the experiments generalisable.
+
+### Our result
+
+![Generalisation with the threshold](analysis/results/outputs/generalisationWithT.png)
+We have similar results, with a non-identical but still similar order of policies. For instance, combinations with SQF, SPF, LCFS and EXP as primary policies are at the bottom on both plots.
+
+We also generated a similar plot using the results from the simulation WITHOUT the threshold mechanism this time. 
+
+![Generalisation without the threshold](analysis/results/outputs/generalisationWithoutT.png)
+
+The y-axis is here much larger, showing that average waiting times are way smaller when using the threshold, supporting what we previously illustrated. Moreover, we see that on average (over all combinations), the average waiting times decreases less when using the threshold then when not (`-32%` vs `-18%`). There are still a few differences, some policies performing worse/better with our results, and absolute values being overall a little bit wore. These could also be due to differences in resampling methods or with the specific generated workloads we obtained. 
+
