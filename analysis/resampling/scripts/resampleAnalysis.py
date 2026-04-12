@@ -1,11 +1,15 @@
-from collections import defaultdict, Counter
-from datetime import datetime, timedelta
+from collections import defaultdict
 from statistics import mean
 import pandas as pd
 import json
 
-def importDataFromFileCSV(file):
 
+"""
+This file was used to perform little stats on resampled data.
+Mostly a helper file! 
+"""
+
+def importDataFromFileCSV(file):
 
     data = defaultdict(lambda: defaultdict(list))
 

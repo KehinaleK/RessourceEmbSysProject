@@ -2,9 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import json
 
-with open("ogTraceStats.json", 'r') as JSON:
+with open("../outputs/ogTraceStats.json", 'r') as JSON:
         ogTraceStats = json.load(JSON)
-with open("resamplesTraceStats.json", 'r') as JSON:
+with open("../outputs/resamplesTraceStats.json", 'r') as JSON:
         resampleTraceStats = json.load(JSON)
 
 

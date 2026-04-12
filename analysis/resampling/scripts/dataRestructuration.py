@@ -1,8 +1,13 @@
 from collections import defaultdict, Counter
 from datetime import datetime, timedelta
 from statistics import mean
-import pandas as pd
 import json
+
+"""
+This script is a helper script used to restructure data. It helped creating
+the weeklyActivity file as well as to get info on long term and short term users
+used for resamples analysis in other scripts. 
+"""
 
 def importDataFromFile(file):
 
@@ -25,25 +30,6 @@ def importDataFromFile(file):
             if len(line) > 0:
                 data[line[0]].append(line[1:])
                 counts[line[0]] += 1
-
-    return data
-
-def importDataFromFileCSV(file):
-
-
-    data = defaultdict(lambda: defaultdict(list))
-
-    df = pd.read_csv(file)
-
-    week_col = "week"
-    user_col = "usr"
-
-    for _, row in df.iterrows():
-        week = int(row[week_col])
-        user = str(row[user_col])
-        values = row.drop(labels=[week_col, user_col]).tolist()
-
-        data[week][user].append(values)
 
     return data
 
@@ -91,21 +77,18 @@ def getUserTypeInfo(data):
     
     return usersAvg, permanentUsers, permanentUsersAvg, temporaryUsers, temporaryUsersAvg,
 
-def saveUserModelling(permanentUsers, temporaryUsers, temporaryUsersAvg):
+# def saveUserModelling(permanentUsers, temporaryUsers, temporaryUsersAvg):
 
-    userMod = {"totalU" : len(permanentUsers) + len(temporaryUsers), "AvgT" : temporaryUsersAvg, 
-               "P" : permanentUsers, "T" : temporaryUsers}
-    with open('UserModelling.json', 'w') as fp:
-        json.dump(userMod, fp)
+#     userMod = {"totalU" : len(permanentUsers) + len(temporaryUsers), "AvgT" : temporaryUsersAvg, 
+#                "P" : permanentUsers, "T" : temporaryUsers}
+#     with open('UserModelling.json', 'w') as fp:
+#         json.dump(userMod, fp)
 
 def userActivityPerWeek(userData, allWeeksStarts):
 
 
     """weeklyActivity = { user : {week : [[sub], [sub]], week2 : [[sub]]}}"""
-
     weeklyActivity = {}
-    weeklyNbJobs = {}
-
     for user, subs in userData.items():
         weeklyActivity[user] = {}
         for week in allWeeksStarts:
@@ -139,12 +122,10 @@ def getAverageNumberOfTypeUsersAWeek(temporaryUsers, permanentUsers, data):
     temporaryUsersAverage = []
     permanentUsersAverage = []
     usersAverage = []
-
     allWeeksStarts = getAllWeeksStarts()
 
     i = 0
     for week in allWeeksStarts:
-        # print("############# WEEK ", i)
         numTemporaryUsers = 0
         numPermanentUsers = 0
         numUsers = 0
@@ -206,8 +187,6 @@ def getAverageNumberJobs(temporaryUsers, permanentUsers, data):
 
     return totalJobs, mean(jobsAverage)
 
-
-
 def getUserInfoFromFile(userInfoFile):
 
     with open(userInfoFile, 'r') as JSON:
@@ -217,25 +196,15 @@ def getUserInfoFromFile(userInfoFile):
 
 def getUserInfoFromResample(resampleData):
 
-    totalJobs = 0
-    allJobs = []
-    temporaryUserJobs = []
-    permanentUserJobs = []
-
     for week, data in resampleData.items():
         
         for user, subs in data.items():
             totalsubs += len(subs)
 
-
-
-
 if __name__ == "__main__":
 
     totalsubs = 0
     userData = importDataFromFile('KTH-SP2-1996-0.txt')
-    # userData = importDataFromFileCSV('analysis/resampling/ResampleTrace50_2.csv')
-
 
     ogTraceInfo = {"TotalUsers" : 0, "TotalT" : 0, "TotalP" : 0,
                    "TotalJobs"  : 0, "AvgJobsPerWeek" : 0, "AvgUsersPerWeek" : 0,
@@ -243,10 +212,6 @@ if __name__ == "__main__":
     
 
     userModelling = getUserInfoFromFile("UserModelling.json")
-    # for week, usrData in userData.items():
-    #     print(week)
-                
-
         
     # FOR THE OG TRACE
     userAvg, permanentUsers, permanendUsersAvg, temporaryUsers, temporaryUsersAvg = getUserTypeInfo(userData)
@@ -261,15 +226,3 @@ if __name__ == "__main__":
     ogTraceInfo["AvgPPerWeek"] = permanendUsersAvg
     with open('ogTraceStats.json', 'w') as fp:
         json.dump(ogTraceInfo, fp)
-
-
-
-    # FOR THE RESAMPLED TRACES
-
-    # saveUserModelling(permanentUsers, temporaryUsers, temporaryUsersAvg)
-    # weeklyActivity = userActivityPerWeek(userData, allWeeksStarts)
-    # json.dumps(weeklyActivity)
-
-    # with open('weeklyActivity.json', 'w') as fp:
-    #     json.dump(weeklyActivity, fp)
-
